@@ -8,31 +8,32 @@ use App\Http\Requests\UpdatePostRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
 
 class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index()
     {
-        return response()->view('posts.index', [
-            'posts' => Post::orderBy('update_at', 'desc')->get(),
+        return Inertia::render('Posts/Index', [
+            'posts' => Post::orderBy('updated_at', 'desc')->get(),
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): Response
+    public function create()
     {
-        return response()->view('posts.form');
+        return Inertia::render('Posts/Create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePostRequest $request): RedirectResponse
+    public function store(StorePostRequest $request)
     {
 
         $validated = $request->validated();
@@ -55,9 +56,9 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id): Response
+    public function show(string $id)
     {
-        return response()->view('posts.show', [
+        return Inertia::render('Posts/Show', [
             'post' => Post::findOrFail($id),
         ]);
     }
@@ -65,11 +66,11 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id): Response
+    public function edit($id)
     {
         //
-        return response()->view(
-            'posts.form',
+        return Inertia::render(
+            'Posts/Edit',
             [
                 'post' => Post::findOrFail($id),
             ]
@@ -79,7 +80,7 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePostRequest $request, string $id): RedirectResponse
+    public function update(UpdatePostRequest $request, string $id)
     {
         $post = Post::findOrFail($id);
         $validated = $request->validated();
@@ -105,7 +106,7 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id): RedirectResponse
+    public function destroy(string $id)
     {
         $post = Post::findOrFail($id);
 
